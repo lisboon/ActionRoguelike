@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "ARCharacter.generated.h"
 
+struct FInputActionInstance;
 struct FInputActionValue;
 class UInputAction;
 class USpringArmComponent;
@@ -38,6 +39,8 @@ protected:
 	virtual void BeginPlay() override;
 
 	void Move(const FInputActionValue& Invalue);
+	
+	void Look(const FInputActionInstance& InValue);
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
