@@ -6,8 +6,11 @@
 #include "GameFramework/Character.h"
 #include "ARCharacter.generated.h"
 
+struct FInputActionValue;
+class UInputAction;
 class USpringArmComponent;
 class UCameraComponent;
+
 
 UCLASS()
 class ACTIONROGUELIKE_API AARCharacter : public ACharacter
@@ -19,6 +22,12 @@ public:
 	AARCharacter();
 
 protected:
+	UPROPERTY(EditDefaultsOnly, Category="Input")
+	TObjectPtr<UInputAction> Input_Move;
+	
+	UPROPERTY(EditDefaultsOnly, Category="Input")
+	TObjectPtr<UInputAction> Input_Look;
+	
 	UPROPERTY(VisibleAnywhere, Category="Components")
 	TObjectPtr<UCameraComponent> CameraComponent;
 	
@@ -28,11 +37,11 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	void Move(const FInputActionValue& Invalue);
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
 };

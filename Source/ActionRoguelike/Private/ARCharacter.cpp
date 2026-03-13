@@ -2,13 +2,13 @@
 
 
 #include "ARCharacter.h"
-
+#include "EnhancedInputComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 
 // Sets default values
 AARCharacter::AARCharacter()
-{
+{	
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	
@@ -17,27 +17,36 @@ AARCharacter::AARCharacter()
 	
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
 	CameraComponent->SetupAttachment(SpringArmComponent);
-	
 }
 
 // Called when the game starts or when spawned
 void AARCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+}
+
+void AARCharacter::Move(const FInputActionValue& InValue)
+{
+	FVector2D InputValue = InValue.Get<FVector2D>();
+
+	FVector MoveDirection = FVector(InputValue.X, InputValue.Y, 0.0f);
 	
+	AddMovementInput(MoveDirection);
 }
 
 // Called every frame
 void AARCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input
 void AARCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	
+	UEnhancedInputComponent* EnhancedInput = Cast<UEnhancedInputComponent>(PlayerInputComponent);
 
+	EnhancedInput->BindAction(Input_Move, ETriggerEvent::Triggered, this, &AARCharacter::Move);
 }
 
