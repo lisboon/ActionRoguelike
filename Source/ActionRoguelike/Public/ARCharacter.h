@@ -6,11 +6,13 @@
 #include "GameFramework/Character.h"
 #include "ARCharacter.generated.h"
 
+class AARProjectileMagic;
 struct FInputActionInstance;
 struct FInputActionValue;
 class UInputAction;
 class USpringArmComponent;
 class UCameraComponent;
+class UAnimMontage;
 
 
 UCLASS()
@@ -23,11 +25,24 @@ public:
 	AARCharacter();
 
 protected:
+	
+	UPROPERTY(EditDefaultsOnly, Category="PrimaryAttack")
+	TSubclassOf<AARProjectileMagic> ProjectileClass;
+
+	UPROPERTY(VisibleAnywhere, Category="PrimaryAttack")
+	FName MuzzleSocketName;
+	
+	UPROPERTY(EditDefaultsOnly, Category="PrimaryAttack")
+	TObjectPtr<UAnimMontage> AttackMontage;
+	
 	UPROPERTY(EditDefaultsOnly, Category="Input")
 	TObjectPtr<UInputAction> Input_Move;
 	
 	UPROPERTY(EditDefaultsOnly, Category="Input")
 	TObjectPtr<UInputAction> Input_Look;
+	
+	UPROPERTY(EditDefaultsOnly, Category="Input")
+	TObjectPtr<UInputAction> Input_PrimaryAttack;
 	
 	UPROPERTY(VisibleAnywhere, Category="Components")
 	TObjectPtr<UCameraComponent> CameraComponent;
@@ -41,6 +56,10 @@ protected:
 	void Move(const FInputActionValue& Invalue);
 	
 	void Look(const FInputActionInstance& InValue);
+	
+	void PrimaryAttack();
+	
+	void AttackTimerElapsed();
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

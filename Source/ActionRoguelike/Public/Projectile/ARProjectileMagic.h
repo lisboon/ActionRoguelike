@@ -6,17 +6,21 @@
 #include "GameFramework/Actor.h"
 #include "ARProjectileMagic.generated.h"
 
+class UNiagaraSystem;
 class UProjectileMovementComponent;
 class USphereComponent;
 class UNiagaraComponent;
 
-UCLASS()
+UCLASS(Abstract)
 class ACTIONROGUELIKE_API AARProjectileMagic : public AActor
 {
 	GENERATED_BODY()
 
 protected:
 
+	UPROPERTY(EditDefaultsOnly, Category="Effects")
+	TObjectPtr<UNiagaraSystem> ExplosionEffect;
+	
 	UPROPERTY(EditDefaultsOnly, Category="Components")
 	TObjectPtr<USphereComponent> SphereComponent;
 
@@ -24,8 +28,13 @@ protected:
 	TObjectPtr<UNiagaraComponent> LoopedNiagaraComponent;
 
 	UPROPERTY(EditDefaultsOnly, Category="Components")
-	TObjectPtr<UProjectileMovementComponent> ProjectileMovementComponent;	
+	TObjectPtr<UProjectileMovementComponent> ProjectileMovementComponent;
+	
+	UFUNCTION()
+	void OnActorHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 	
 public:
+	virtual void PostInitializeComponents() override;
+	
 	AARProjectileMagic();
 };
